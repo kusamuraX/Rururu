@@ -1,11 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 ///
-/// ゲーム 
+/// ゲーム
 ///
 class GameWidget extends ConsumerWidget {
-
   final countProvider = Provider<int>((ref) {
     return 4;
   });
@@ -27,9 +29,12 @@ class GameWidget extends ConsumerWidget {
                     width: 50,
                     height: 50,
                     color: Colors.amber,
-                    padding: EdgeInsets.all(8),
                     child: TextField(
                       maxLength: 1,
+                      textAlign: TextAlign.center,
+                      maxLengthEnforcement:
+                          MaxLengthEnforcement.truncateAfterCompositionEnds,
+                      style: TextStyle(fontSize: 24),
                       decoration: InputDecoration(counterText: ''),
                     ),
                   ),
@@ -61,15 +66,24 @@ class GameWidget extends ConsumerWidget {
               ),
             ),
             Container(
+              margin: EdgeInsets.all(8),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blueAccent,
+                  minimumSize: const Size.fromHeight(50),
+                ),
+                onPressed: () {},
+                child: const Text("CHECK!"),
+              ),
+            ),
+            Container(
               color: Colors.black12,
               child: Column(
                 children: [
-
                   const Text('test1'),
                   const Text('test2'),
                   const Text('test3'),
                   const Text('test4'),
-
                 ],
               ),
             )
@@ -78,5 +92,4 @@ class GameWidget extends ConsumerWidget {
       ),
     );
   }
-  
 }
