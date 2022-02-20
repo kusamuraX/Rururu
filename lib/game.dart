@@ -1,8 +1,7 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rururu/state/game.dart';
 
 ///
 /// ゲーム
@@ -30,37 +29,56 @@ class GameWidget extends ConsumerWidget {
                     height: 50,
                     color: Colors.amber,
                     child: TextField(
+                      controller: ref.watch(textController_1),
                       maxLength: 1,
                       textAlign: TextAlign.center,
                       maxLengthEnforcement:
                           MaxLengthEnforcement.truncateAfterCompositionEnds,
                       style: TextStyle(fontSize: 24),
-                      decoration: InputDecoration(counterText: ''),
+                      decoration: InputDecoration(counterText: ""),
                     ),
                   ),
                   Container(
                     width: 50,
                     height: 50,
                     color: Colors.amber,
-                    child: TextField(),
+                    child: TextField(
+                      controller: ref.watch(textController_1),
+                      maxLength: 1,
+                      textAlign: TextAlign.center,
+                      maxLengthEnforcement:
+                          MaxLengthEnforcement.truncateAfterCompositionEnds,
+                      style: TextStyle(fontSize: 24),
+                      decoration: InputDecoration(counterText: ""),
+                    ),
                   ),
                   Container(
                     width: 50,
                     height: 50,
                     color: Colors.amber,
-                    child: TextField(),
+                    child: TextField(
+                      controller: ref.watch(textController_1),
+                      maxLength: 1,
+                      textAlign: TextAlign.center,
+                      maxLengthEnforcement:
+                          MaxLengthEnforcement.truncateAfterCompositionEnds,
+                      style: TextStyle(fontSize: 24),
+                      decoration: InputDecoration(counterText: ""),
+                    ),
                   ),
                   Container(
                     width: 50,
                     height: 50,
                     color: Colors.amber,
-                    child: TextField(),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    color: Colors.amber,
-                    child: TextField(),
+                    child: TextField(
+                      controller: ref.watch(textController_1),
+                      maxLength: 1,
+                      textAlign: TextAlign.center,
+                      maxLengthEnforcement:
+                          MaxLengthEnforcement.truncateAfterCompositionEnds,
+                      style: TextStyle(fontSize: 24),
+                      decoration: InputDecoration(counterText: ""),
+                    ),
                   ),
                 ],
               ),
@@ -72,7 +90,7 @@ class GameWidget extends ConsumerWidget {
                   primary: Colors.blueAccent,
                   minimumSize: const Size.fromHeight(50),
                 ),
-                onPressed: () {},
+                onPressed: () => {},
                 child: const Text("CHECK!"),
               ),
             ),
