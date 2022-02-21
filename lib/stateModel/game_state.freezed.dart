@@ -18,9 +18,10 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$GameStateTearOff {
   const _$GameStateTearOff();
 
-  _GameState call({String? word_1 = ""}) {
+  _GameState call({List<String> wordList = const [], List<List<ui.Image>> answerList = const []}) {
     return _GameState(
-      word_1: word_1,
+      wordList: wordList,
+      answerList: answerList,
     );
   }
 }
@@ -30,18 +31,17 @@ const $GameState = _$GameStateTearOff();
 
 /// @nodoc
 mixin _$GameState {
-  String? get word_1 => throw _privateConstructorUsedError;
+  List<String> get wordList => throw _privateConstructorUsedError;
+  List<List<ui.Image>> get answerList => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $GameStateCopyWith<GameState> get copyWith =>
-      throw _privateConstructorUsedError;
+  $GameStateCopyWith<GameState> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $GameStateCopyWith<$Res> {
-  factory $GameStateCopyWith(GameState value, $Res Function(GameState) then) =
-      _$GameStateCopyWithImpl<$Res>;
-  $Res call({String? word_1});
+  factory $GameStateCopyWith(GameState value, $Res Function(GameState) then) = _$GameStateCopyWithImpl<$Res>;
+  $Res call({List<String> wordList, List<List<ui.Image>> answerList});
 }
 
 /// @nodoc
@@ -54,44 +54,50 @@ class _$GameStateCopyWithImpl<$Res> implements $GameStateCopyWith<$Res> {
 
   @override
   $Res call({
-    Object? word_1 = freezed,
+    Object? wordList = freezed,
+    Object? answerList = freezed,
   }) {
     return _then(_value.copyWith(
-      word_1: word_1 == freezed
-          ? _value.word_1
-          : word_1 // ignore: cast_nullable_to_non_nullable
-              as String?,
+      wordList: wordList == freezed
+          ? _value.wordList
+          : wordList // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      answerList: answerList == freezed
+          ? _value.answerList
+          : answerList // ignore: cast_nullable_to_non_nullable
+              as List<List<ui.Image>>,
     ));
   }
 }
 
 /// @nodoc
 abstract class _$GameStateCopyWith<$Res> implements $GameStateCopyWith<$Res> {
-  factory _$GameStateCopyWith(
-          _GameState value, $Res Function(_GameState) then) =
-      __$GameStateCopyWithImpl<$Res>;
+  factory _$GameStateCopyWith(_GameState value, $Res Function(_GameState) then) = __$GameStateCopyWithImpl<$Res>;
   @override
-  $Res call({String? word_1});
+  $Res call({List<String> wordList, List<List<ui.Image>> answerList});
 }
 
 /// @nodoc
-class __$GameStateCopyWithImpl<$Res> extends _$GameStateCopyWithImpl<$Res>
-    implements _$GameStateCopyWith<$Res> {
-  __$GameStateCopyWithImpl(_GameState _value, $Res Function(_GameState) _then)
-      : super(_value, (v) => _then(v as _GameState));
+class __$GameStateCopyWithImpl<$Res> extends _$GameStateCopyWithImpl<$Res> implements _$GameStateCopyWith<$Res> {
+  __$GameStateCopyWithImpl(_GameState _value, $Res Function(_GameState) _then) : super(_value, (v) => _then(v as _GameState));
 
   @override
   _GameState get _value => super._value as _GameState;
 
   @override
   $Res call({
-    Object? word_1 = freezed,
+    Object? wordList = freezed,
+    Object? answerList = freezed,
   }) {
     return _then(_GameState(
-      word_1: word_1 == freezed
-          ? _value.word_1
-          : word_1 // ignore: cast_nullable_to_non_nullable
-              as String?,
+      wordList: wordList == freezed
+          ? _value.wordList
+          : wordList // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      answerList: answerList == freezed
+          ? _value.answerList
+          : answerList // ignore: cast_nullable_to_non_nullable
+              as List<List<ui.Image>>,
     ));
   }
 }
@@ -99,15 +105,18 @@ class __$GameStateCopyWithImpl<$Res> extends _$GameStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_GameState implements _GameState {
-  const _$_GameState({this.word_1 = ""});
+  const _$_GameState({this.wordList = const [], this.answerList = const []});
 
   @JsonKey()
   @override
-  final String? word_1;
+  final List<String> wordList;
+  @JsonKey()
+  @override
+  final List<List<ui.Image>> answerList;
 
   @override
   String toString() {
-    return 'GameState(word_1: $word_1)';
+    return 'GameState(wordList: $wordList, answerList: $answerList)';
   }
 
   @override
@@ -115,26 +124,26 @@ class _$_GameState implements _GameState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _GameState &&
-            const DeepCollectionEquality().equals(other.word_1, word_1));
+            const DeepCollectionEquality().equals(other.wordList, wordList) &&
+            const DeepCollectionEquality().equals(other.answerList, answerList));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(word_1));
+  int get hashCode => Object.hash(runtimeType, const DeepCollectionEquality().hash(wordList), const DeepCollectionEquality().hash(answerList));
 
   @JsonKey(ignore: true)
   @override
-  _$GameStateCopyWith<_GameState> get copyWith =>
-      __$GameStateCopyWithImpl<_GameState>(this, _$identity);
+  _$GameStateCopyWith<_GameState> get copyWith => __$GameStateCopyWithImpl<_GameState>(this, _$identity);
 }
 
 abstract class _GameState implements GameState {
-  const factory _GameState({String? word_1}) = _$_GameState;
+  const factory _GameState({List<String> wordList, List<List<ui.Image>> answerList}) = _$_GameState;
 
   @override
-  String? get word_1;
+  List<String> get wordList;
+  @override
+  List<List<ui.Image>> get answerList;
   @override
   @JsonKey(ignore: true)
-  _$GameStateCopyWith<_GameState> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$GameStateCopyWith<_GameState> get copyWith => throw _privateConstructorUsedError;
 }
