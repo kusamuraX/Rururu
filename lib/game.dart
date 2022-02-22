@@ -11,6 +11,25 @@ import 'stateModel/game_state.dart';
 /// ゲームwidget
 ///
 class GameWidget extends ConsumerWidget {
+  final List<GlobalKey<_CustomTextFieldState>> inputKeys = [];
+
+  static Route<Object?> _dialogBuilder(
+      BuildContext context, Object? arguments) {
+    return DialogRoute<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) =>
+          const SimpleDialog(title: Text('PreParing New Game'), children: [
+        Center(
+          child: CircularProgressIndicator(),
+        ),
+        const SizedBox(
+          height: 20,
+        )
+      ]),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     GameState gameState = ref.watch(gameStateProvider);
@@ -22,7 +41,15 @@ class GameWidget extends ConsumerWidget {
           Container(
             margin: EdgeInsets.all(8),
             child: OutlinedButton(
-              onPressed: () => ref.read(gameStateProvider.notifier).newGame(),
+              onPressed: () async {
+                Navigator.of(context).restorablePush(_dialogBuilder);
+                inputKeys.forEach((element) {
+                  element.currentState?.clearText();
+                });
+                inputKeys.clear();
+                await ref.read(gameStateProvider.notifier).newGame();
+                Navigator.of(context).pop();
+              },
               child: const Text(
                 "NEW",
                 style: TextStyle(color: Colors.white),
@@ -46,11 +73,12 @@ class GameWidget extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
                 children: List.generate(gameState.wordList.length, (index) {
+                  inputKeys.add(GlobalKey<_CustomTextFieldState>());
                   return Container(
                     width: 50,
                     height: 50,
                     color: Colors.amber,
-                    child: CustomTextField(index),
+                    child: CustomTextField(index, inputKeys[index]),
                   );
                 }),
               ),
@@ -63,7 +91,9 @@ class GameWidget extends ConsumerWidget {
                   primary: Colors.blueAccent,
                   minimumSize: const Size.fromHeight(50),
                 ),
-                onPressed: () => ref.read(gameStateProvider.notifier).match(),
+                onPressed: ref.read(gameStateProvider).wordList.length == 0
+                    ? null
+                    : () => ref.read(gameStateProvider.notifier).match(),
                 child: const Text("CHECK!"),
               ),
             ),
@@ -72,18 +102,24 @@ class GameWidget extends ConsumerWidget {
                 margin: EdgeInsets.all(8),
                 child: SingleChildScrollView(
                   child: Column(
-                    children: List.generate(gameState.answerList.length, (answerIndex) {
+                    children: List.generate(gameState.answerList.length,
+                        (answerIndex) {
                       return Container(
                         margin: EdgeInsets.only(bottom: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: List.generate(gameState.answerList[answerIndex].length, (index) {
+                          children: List.generate(
+                              gameState.answerList[answerIndex].length,
+                              (index) {
                             return Container(
                               width: 50,
                               height: 50,
                               color: Colors.redAccent.shade100,
                               child: CustomPaint(
-                                painter: CorrectOrNotPainer(gameState.answerList[gameState.answerList.length - (answerIndex + 1)][index]),
+                                painter: CorrectOrNotPainer(
+                                    gameState.answerList[
+                                        gameState.answerList.length -
+                                            (answerIndex + 1)][index]),
                               ),
                             );
                           }),
@@ -107,20 +143,24 @@ class GameWidget extends ConsumerWidget {
 class CustomTextField extends ConsumerStatefulWidget {
   final int index;
 
-  CustomTextField(this.index);
+  CustomTextField(this.index, Key key) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CustomTextFieldState();
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends ConsumerState<CustomTextField> {
   late TextEditingController _textController;
 
+  bool _textEnabled = true;
+
   @override
   void initState() {
     super.initState();
     GameState gameState = ref.read(gameStateProvider);
-    _textController = TextEditingController(text: gameState.wordList[widget.index]);
+    _textController =
+        TextEditingController(text: gameState.wordList[widget.index]);
   }
 
   @override
@@ -129,16 +169,29 @@ class _CustomTextFieldState extends ConsumerState<CustomTextField> {
     super.dispose();
   }
 
+  void clearText() {
+    _textController.clear();
+  }
+
+  void disabled() {
+    setState(() {
+      _textEnabled = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
+      showCursor: false,
       controller: _textController,
       maxLength: 1,
+      enabled: _textEnabled,
       textAlign: TextAlign.center,
       maxLengthEnforcement: MaxLengthEnforcement.truncateAfterCompositionEnds,
-      style: TextStyle(fontSize: 24),
+      style: TextStyle(fontSize: 18),
       decoration: InputDecoration(counterText: ""),
-      onChanged: (newText) => ref.read(gameStateProvider.notifier).setText(widget.index, newText),
+      onChanged: (newText) =>
+          ref.read(gameStateProvider.notifier).setText(widget.index, newText),
     );
   }
 }
@@ -155,7 +208,8 @@ class CorrectOrNotPainer extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.drawImageRect(
       inputImage,
-      Rect.fromLTWH(0, 0, inputImage.width.toDouble(), inputImage.height.toDouble()),
+      Rect.fromLTWH(
+          0, 0, inputImage.width.toDouble(), inputImage.height.toDouble()),
       Rect.fromLTWH(0, 0, size.width, size.height),
       Paint(),
     );

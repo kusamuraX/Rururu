@@ -1,17 +1,14 @@
 import 'dart:ui' as ui;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rururu/api/get_word.dart';
 import 'package:rururu/stateModel/game_state.dart';
 
-final String corrent = "三種の神器";
+String corrent = "";
 
 final gameStateProvider = StateNotifierProvider<GameStateNotifer, GameState>((ref) {
-  List<String> generateList = List.generate(corrent.length, (index) {
-    return "";
-  });
-  return GameStateNotifer(GameState(wordList: generateList));
+  return GameStateNotifer(GameState(wordList: []));
 });
 
 class GameStateNotifer extends StateNotifier<GameState> {
@@ -23,11 +20,16 @@ class GameStateNotifer extends StateNotifier<GameState> {
     state = state.copyWith(wordList: newWordList);
   }
 
-  newGame() {
+  newGame() async {
+    state = GameState(wordList: [], answerList: []);
+
+    corrent = await WordAPI().getWord();
+
     List<String> generateList = List.generate(corrent.length, (index) {
       return "";
     });
-    state = GameState(wordList: generateList, answerList: []);
+
+    state =  state.copyWith(wordList: generateList);
   }
 
   match() async {
@@ -44,7 +46,7 @@ class GameStateNotifer extends StateNotifier<GameState> {
       } else {
         final inputPictureRecorder = ui.PictureRecorder();
         final inputCanvas = Canvas(inputPictureRecorder);
-        final inputTextStyle = TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'Roboto');
+        final inputTextStyle = TextStyle(color: Colors.black, fontSize: 30, fontFamily: 'NotoSansJavanese');
         final inputTextSpan = TextSpan(text: state.wordList[i], style: inputTextStyle);
         final inputTextPainter = TextPainter(text: inputTextSpan, textDirection: TextDirection.ltr);
         inputTextPainter.layout();
@@ -54,7 +56,7 @@ class GameStateNotifer extends StateNotifier<GameState> {
 
         final correctPictureRecorder = ui.PictureRecorder();
         final correctCanvas = Canvas(correctPictureRecorder);
-        final correctTextStyle = TextStyle(color: Colors.amber, fontSize: 30, fontFamily: 'Roboto');
+        final correctTextStyle = TextStyle(color: Colors.amber, fontSize: 30, fontFamily: 'NotoSansJavanese');
         final correctTextSpan = TextSpan(text: corrent[i], style: correctTextStyle);
         final correctTextPainter = TextPainter(text: correctTextSpan, textDirection: TextDirection.ltr);
         correctTextPainter.layout();
